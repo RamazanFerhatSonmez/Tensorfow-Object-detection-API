@@ -2,6 +2,10 @@
 Custom Mask RCNN using Tensorfow Object detection API
 
 # Installation
+``` 
+git clone https://github.com/RamazanFerhatSonmez/Tensorfow-Object-detection-API.git
+
+```
 
 ## Dependencies
 
