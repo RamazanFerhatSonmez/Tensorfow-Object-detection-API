@@ -14,16 +14,16 @@ from matplotlib import pyplot as plt
 from PIL import Image
 import time
 # This is needed since the notebook is stored in the object_detection folder.
-sys.path.append("/home/argenit/spyder/tensorflow/models/research")
+sys.path.append("/home/argenit/Tensorfow-Object-detection-API/models/research")
 from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
-PATH_TO_FROZEN_GRAPH = "/home/argenit/spyder/tensorflow/graph/frozen_inference_graph_DAPI1.pb"
+PATH_TO_FROZEN_GRAPH = "/home/argenit/Tensorfow-Object-detection-API/graph/frozen_inference_graph_DAPI1.pb"
 
 # List of the strings that is used to add correct label for each box.
-PATH_TO_LABELS = "/home/argenit/spyder/tensorflow/graph/label.pbtxt"
+PATH_TO_LABELS = "/home/argenit/Tensorfow-Object-detection-API/graph/label.pbtxt"
 
 #Number of classes
 NUM_CLASSES = 2
@@ -47,7 +47,7 @@ def load_image_into_numpy_array(image):
   return np.array(image.getdata()).reshape(
       (im_height, im_width, 3)).astype(np.uint8)
 
-PATH_TO_TEST_IMAGES_DIR = '/home/argenit/spyder/tensorflow/testImages'
+PATH_TO_TEST_IMAGES_DIR = '/home/argenit/Tensorfow-Object-detection-API/testImages'
 TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'index{}.jpeg'.format(i)) for i in range(2, 4) ]
 
 # Size, in inches, of the output images.
@@ -129,7 +129,7 @@ for image_path in TEST_IMAGE_PATHS:
   plt.imshow(image_np)
   im = Image.fromarray(image_np)
   
-  im.save(os.path.join("/home/argenit/spyder/tensorflow/your_file_{}.jpeg").format(counter))
+  im.save(os.path.join("/home/argenit/Tensorfow-Object-detection-API/your_file_{}.jpeg").format(counter))
 
 
 
