@@ -111,6 +111,7 @@ for image_path in TEST_IMAGE_PATHS:
   image_np = load_image_into_numpy_array(image)
   # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
   image_np_expanded = np.expand_dims(image_np, axis=0)
+
   # Actual detection.
   output_dict = run_inference_for_single_image(image_np, detection_graph)
   # Visualization of the results of a detection.
@@ -129,26 +130,22 @@ for image_path in TEST_IMAGE_PATHS:
   plt.imshow(image_np)
   im = Image.fromarray(image_np)
   
-  im.save(os.path.join("/home/argenit/Tensorfow-Object-detection-API/your_file_{}.jpeg").format(counter))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  im.save(os.path.join("/home/argenit/Tensorfow-Object-detection-API/index{}.jpeg").format(counter))
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
