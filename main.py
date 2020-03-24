@@ -7,7 +7,7 @@ import sys
 import tarfile
 import tensorflow as tf
 import zipfile
-
+import mysql.connector as mysql
 from collections import defaultdict
 from io import StringIO
 from matplotlib import pyplot as plt
@@ -48,11 +48,27 @@ def load_image_into_numpy_array(image):
       (im_height, im_width, 3)).astype(np.uint8)
 
 PATH_TO_TEST_IMAGES_DIR = '/home/argenit/Tensorfow-Object-detection-API/testImages'
-TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'index{}.jpeg'.format(i)) for i in range(2, 4) ]
+TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.jpeg'.format(i)) for i in range(1, 5) ]
 
 # Size, in inches, of the output images.
 IMAGE_SIZE = (12, 8)
-
+def insort_database (image_path,point_list):
+    db = mysql.connect(host="localhost",user="root",password="1234",database="dedection_spots")
+    print("MYDB ::",db)
+    (left_top, right_top,left_bottom, right_bottom) = (point_list[0],point_list[1], point_list[2], point_list[3])
+    spotsDB = db.cursor()
+    print("spotsDB::",spotsDB)
+    print("image_path::",image_path)
+    print("db.cursor()::", db.cursor())
+    sql_insert = "INSERT INTO spots (image_path) VALUES ('%s');" % (image_path)
+    spotsDB.execute(sql_insert)
+    sql_select = "SELECT * FROM spots WHERE image_path = '%s';"% (image_path)
+    spotsDB.execute(sql_select)
+    myresult = spotsDB.fetchall()
+    (image_id,image__path)= myresult[0]
+    sql_spots_points = "INSERT INTO spots_points (image_id,left_top,right_top,left_bottom, right_bottom ) VALUES (%s,%s,%s,%s,%s);" % (image_id,left_top, right_top,left_bottom, right_bottom)
+    spotsDB.execute(sql_spots_points)    
+    db.commit()
 def run_inference_for_single_image(image, graph):
   with graph.as_default():
     with tf.Session() as sess:
@@ -115,7 +131,7 @@ for image_path in TEST_IMAGE_PATHS:
   # Actual detection.
   output_dict = run_inference_for_single_image(image_np, detection_graph)
   # Visualization of the results of a detection.
-  vis_util.visualize_boxes_and_labels_on_image_array(
+  point_list = vis_util.visualize_boxes_and_labels_on_image_array(
       image_np,
       output_dict['detection_boxes'],
       output_dict['detection_classes'],
@@ -124,15 +140,16 @@ for image_path in TEST_IMAGE_PATHS:
       instance_masks=output_dict.get('detection_masks'),
       use_normalized_coordinates=True,
       line_thickness=8)
+  image_path_dedection = os.path.join("/home/argenit/Tensorfow-Object-detection-API/imagee{}.jpeg").format(counter)
+  insort_database(image_path_dedection,point_list)
+  print("IMAGE PATH :: ",image_path)
   fig = plt.figure(figsize=IMAGE_SIZE)
   ax = fig.gca()
   ax.grid(False)
   plt.imshow(image_np)
   im = Image.fromarray(image_np)
-  
-  im.save(os.path.join("/home/argenit/Tensorfow-Object-detection-API/index{}.jpeg").format(counter))
-  
-  
+  im.save(os.path.join("/home/argenit/Tensorfow-Object-detection-API/image{}.jpeg").format(counter))
+
   
   
   
